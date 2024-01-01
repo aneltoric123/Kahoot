@@ -1,0 +1,11 @@
+body {
+    background: linear-gradient(to right, #ffcccc, #ff99cc); /* Gradient colors */
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.card {
+    width: 400px;
+}
