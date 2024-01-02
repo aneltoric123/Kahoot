@@ -11,7 +11,6 @@
         }
         .container {
             margin-top: 100px;
-
         }
         a{
             margin-bottom: 30px;
@@ -21,7 +20,7 @@
             padding: 20px;
             border-radius: 10px;
             text-align: center;
-            height: 450px;
+            height: 400px;
             opacity: 0;
             animation: slideInAnimation 1s ease-in-out forwards;
         }
@@ -39,7 +38,7 @@
             transform: scale(1);
         }
         .btn-kahoot:hover {
-            transform: scale(1.05); /* Enlarge on hover */
+            transform: scale(1.05);
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 
         }
@@ -55,32 +54,38 @@
             }
         }
         .kahoot-logo {
-            width: 100px;
-            height: 100px;
-            animation: rotateLogo 20s linear infinite;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            margin-top:-20px;
+            animation: moveLeftToRight 10s linear infinite alternate;
         }
-        @keyframes rotateLogo {
+        @keyframes moveLeftToRight {
             from {
-                transform: rotate(0deg);
+                transform: translateX(0);
             }
             to {
-                transform: rotate(360deg);
+                transform: translateX(calc(100% - 100px));
             }
+
         }
     </style>
 </head>
 <body>
 
 <div class="container">
+
     <div class="row">
+
         <div class="col-md-6 offset-md-3">
+            <img src="../public/images/Kahoot_Logo.png" class="kahoot-logo">
             <div class="jumbotron">
-                <img src="../public/images/Kahoot_Logo.png" class="kahoot-logo">
                 <h1>Welcome to Kahoot</h1>
                 <p>Join the fun learning experience!</p>
                 <a href="/quiz_play" class="btn btn-kahoot btn-lg">Start Playing</a> <br>
                 <a href="/create-quiz" class="btn btn-kahoot btn-lg">Create Quiz</a><br>
                 <a href="/profile/id_u" class="btn btn-kahoot btn-lg">View Profile</a> <br>
+                <a href="/logout" class="btn btn-kahoot btn-lg">Odjava</a> <br>
             </div>
         </div>
     </div>

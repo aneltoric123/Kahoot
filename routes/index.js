@@ -48,6 +48,9 @@ router.post('/login', async function(req, res, next) {
       if (isPasswordValid) {
 
         console.log('Login successful');
+        req.session.userId = user._id;
+        req.session.Email= user.email;
+        req.session.Username=user.usernme;
 
         res.redirect('/home');
         return;
@@ -64,4 +67,16 @@ router.post('/login', async function(req, res, next) {
 router.get('/home', function(req, res, next) {
   res.render('home');
 });
+router.get('/logout',function(req, res,next)
+{
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session:', err);
+      return next(err);
+    }
+    res.redirect('/index');
+    req.session.destroy();
+  });
+});
+
 module.exports = router;
