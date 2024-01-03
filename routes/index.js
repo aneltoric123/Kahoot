@@ -74,8 +74,8 @@ router.get('/logout',function(req, res,next)
       console.error('Error destroying session:', err);
       return next(err);
     }
-    res.redirect('/index');
-    req.session.destroy();
+    res.redirect('/');
+
   });
 });
 
