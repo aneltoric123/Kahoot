@@ -67,6 +67,9 @@ router.post('/login', async function(req, res, next) {
 router.get('/home', function(req, res, next) {
   res.render('home');
 });
+router.get('/create-quiz',function (req, res) {
+  res.render('create_quiz');
+});
 router.get('/logout',function(req, res,next)
 {
   req.session.destroy((err) => {
