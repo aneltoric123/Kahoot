@@ -127,14 +127,16 @@ router.post('/create-quiz', async function(req, res, next) {
   }
 });
 router.get('/profile', async (req, res) => {
+
   const userId = req.session.userId;
+
   if (!userId) {
     res.redirect('/index');
     return;
   }
 
   try {
-    const user = await User.findById(userId);
+    const user = await User.findOne({ email: req.body.email }).maxTimeMS(30000);
     res.render('profile', { user });
   } catch (error) {
     console.error(error);
