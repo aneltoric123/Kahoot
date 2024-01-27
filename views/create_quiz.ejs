@@ -11,7 +11,7 @@
             background: linear-gradient(to right, #99ccff, #99ffcc);
         }
         .container {
-            margin-top: 100px;
+
         }
         h2 {
             color: #FF4500;
@@ -63,9 +63,26 @@
                 transform: translateY(0);
             }
         }
+        .kahoot-logo {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+
+            animation: moveLeftToRight 10s linear infinite alternate;
+        }
+        @keyframes moveLeftToRight {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(calc(100% - 100px));
+            }
+
+        }
     </style>
 </head>
 <body>
+<img src="../public/images/Kahoot_Logo.png" class="kahoot-logo">
 <div class="container">
     <h2>Create Quiz</h2>
     <form method="POST" action="/create-quiz">
@@ -74,36 +91,37 @@
         <hr>
         <h3>Questions:</h3>
         <div id="questions-container">
-            <!-- Questions will be dynamically added here using JavaScript -->
+
         </div>
         <button type="button" onclick="addQuestion()">Add Question</button>
         <button type="button" onclick="closeQuestion()">Close Question</button>
 
-
         <button type="submit">Create Quiz</button>
     </form>
+
 </div>
 <a href="/home" class="btn btn-kahoot btn-lg">Return to Homepage</a>
 <script>
     function addQuestion() {
         const container = document.getElementById('questions-container');
-        const questionNumber = container.children.length + 1;
+        const questionNumber = container.children.length;
 
         const questionDiv = document.createElement('div');
         questionDiv.className = 'question';
         questionDiv.innerHTML = `
-                <h4>Question ${questionNumber}</h4>
-                <label for="questionText${questionNumber}">Question Text:</label>
-                <input type="text" name="questions[${questionNumber - 1}][questionText]" required>
-                <label for="options${questionNumber}">Options (comma-separated):</label>
-                <input type="text" name="questions[${questionNumber - 1}][options]" required>
-                <label for="correctOptionIndex${questionNumber}">Correct Option Index:</label>
-                <input type="number" name="questions[${questionNumber - 1}][correctOptionIndex]" required>
-                <hr>
-            `;
+            <h4>Question ${questionNumber + 1}</h4>
+            <label for="questionText${questionNumber}">Question Text:</label>
+            <input type="text" name="questions[${questionNumber}][questionText]" required>
+            <label for="options${questionNumber}">Options (comma-separated):</label>
+            <input type="text" name="questions[${questionNumber}][options]" required>
+            <label for="correctOptionIndex${questionNumber}">Correct Option Index:</label>
+            <input type="number" name="questions[${questionNumber}][correctOptionIndex]" required>
+            <hr>
+        `;
 
         container.appendChild(questionDiv);
     }
+
     function closeQuestion() {
 
         const currentQuestion = document.querySelector('.question');
