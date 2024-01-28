@@ -34,6 +34,22 @@
       font-size: 1rem;
       color: #777;
     }
+    .kahoot-logo {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      margin-top:-20px;
+      animation: moveLeftToRight 10s linear infinite alternate;
+    }
+    @keyframes moveLeftToRight {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(calc(100% - 100px));
+      }
+
+    }
   </style>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -41,7 +57,7 @@
 </head>
 <body>
 <div class="header">
-  <h1>Kahoot</h1>
+  <img src="../public/images/Kahoot_Logo.png" class="kahoot-logo">
   <p>Welcome to the ultimate quiz experience!</p>
 </div>
 <div class="container mt-5">

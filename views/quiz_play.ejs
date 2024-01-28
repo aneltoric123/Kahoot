@@ -1,13 +1,138 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Play</title>
+
+    <style>
+        body {
+            background: linear-gradient(to right, #99ccff, #99ffcc);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            animation: slideInAnimation 1s ease-in-out forwards;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 1rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            animation: slideInAnimation 1s ease-in-out forwards;
+        }
+
+        .quiz-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .quiz-list li {
+            border-bottom: 1px solid #ddd;
+            padding: 1rem 0;
+        }
+
+        .quiz-list li:last-child {
+            border-bottom: none;
+        }
+
+        .quiz-list li h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        @keyframes slideInAnimation {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .kahoot-logo {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+
+            animation: moveLeftToRight 10s linear infinite alternate;
+        }
+        @keyframes moveLeftToRight {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(calc(100% - 100px));
+            }
+
+        }
+    </style>
 </head>
 <body>
+<img src="../public/images/Kahoot_Logo.png" class="kahoot-logo">
+<header>
+    <h1>Quiz List</h1>
+    <nav>
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/create-quiz">Create Quiz</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </nav>
+</header>
 
+<main>
+    <div class="container">
+        <% if (quizzes.length === 0) { %>
+            <p>No quizzes available.</p>
+        <% } else { %>
+            <ul class="quiz-list">
+                <% quizzes.forEach(quiz => { %>
+                    <li>
+                        <h2><%= quiz.title %></h2>
+                        <a href="/play/<%= quiz._id %>">Play Quiz</a>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } %>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2024 Kahoot</p>
+</footer>
 </body>
+
 </html>

@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 const {MongoClient} = require("mongodb");
+const { ObjectId } = require('mongodb');
 const bcrypt = require('bcrypt');
 const uri = "mongodb://127.0.0.1:27017";
 const User = require('../models/User');
+const Quiz = require('../models/Quiz');
 
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Kahoot' });
@@ -50,7 +52,7 @@ router.post('/login', async function(req, res, next) {
         console.log('Login successful');
         req.session.userId = user._id;
         req.session.Email= user.email;
-        req.session.Username=user.usernme;
+        req.session.Username=user.username;
 
         res.redirect('/home');
         return;
@@ -81,43 +83,31 @@ router.get('/logout',function(req, res,next)
 
   });
 });
-router.post('/create-quiz', async function(req, res, next) {
+router.post('/create-quiz', async (req, res) => {
   const client = new MongoClient(uri);
-  console.log("Request body:", req.body);
   try {
-    console.log("Adding quiz to the database...");
-
-
+    await client.connect();
     const database = client.db('Kahoot');
     const quizzesCollection = database.collection('quizzes');
 
-    const { title, questions } = req.body;
+    const { title } = req.body;
+    const questions = [];
 
-    // Prepare an array to hold the transformed question data
-    const transformedQuestions = [];
 
-    // Iterate over each question and construct the transformed question object
-    for (let i = 0; i < questions.length; i++) {
-      const question = questions[i];
-      const transformedQuestion = {
-        questionText: question.questionText,
-        options: question.options.split(','), // Assuming options are comma-separated
-        correctOptionIndex: parseInt(question.correctOptionIndex)
-      };
-      transformedQuestions.push(transformedQuestion);
+    for (let i = 1; req.body[`question${i}`]; i++) {
+      const questionText = req.body[`question${i}`];
+      const options = req.body[`options${i}`].split(',');
+      const correctOptionIndex = parseInt(req.body[`correctOptionIndex${i}`]);
+      questions.push({ questionText, options, correctOptionIndex });
     }
 
-    // Construct the quiz object with the transformed questions
-    const quiz = {
-      title: title,
-      questions: transformedQuestions
-    };
 
-    // Insert the quiz into the database
-    const result = await quizzesCollection.insertOne(quiz);
-    console.log("Quiz added successfully:", result.insertedId);
+    const quiz = { title, questions };
 
-    // Redirect to some confirmation page or homepage
+
+    await quizzesCollection.insertOne(quiz);
+
+
     res.redirect('/home');
   } catch (error) {
     console.error("Error adding quiz:", error);
@@ -126,21 +116,37 @@ router.post('/create-quiz', async function(req, res, next) {
     await client.close();
   }
 });
+
 router.get('/profile', async (req, res) => {
-
-  const userId = req.session.userId;
-
-  if (!userId) {
-    res.redirect('/index');
-    return;
-  }
+  const client = new MongoClient(uri);
 
   try {
-    const user = await User.findOne({ email: req.body.email }).maxTimeMS(30000);
-    res.render('profile', { user });
+    await client.connect();
+    const database = client.db('Kahoot');
+    const usersCollection = database.collection('users');
+    const userId = req.session.userId;
+    console.log(userId)
+    if (!userId) {
+      res.redirect('/index');
+      return;
+    }
+
+
+    const user = await usersCollection.find({ _id: userId });
+console.log(user);
+    if (!user) {
+      res.redirect('/index');
+      return;
+    }
+
+
+    res.render('profile', { email: req.session.Email, username: req.session.Username });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
+  } finally {
+    // Close the MongoDB connection
+    await client.close();
   }
 });
 
@@ -148,27 +154,67 @@ router.get('/profile', async (req, res) => {
 router.post('/profile/update', async (req, res) => {
   const { email, username } = req.body;
   const userId = req.session.userId;
+  const client = new MongoClient(uri);
+
   try {
-    // Update user data in the database
-    await User.findByIdAndUpdate(userId, { email, username });
+    await client.connect();
+    const database = client.db('Kahoot');
+    const usersCollection = database.collection('users');
+
+
+    await usersCollection.updateOne({ _id: userId }, { $set: { email, username } });
+
+    req.session.Email = email;
+    req.session.Username = username;
+
     res.redirect('/profile');
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
+  } finally {
+    await client.close();
   }
 });
 
-
 router.post('/profile/delete', async (req, res) => {
   const userId = req.session.userId;
-  try {
+  const client = new MongoClient(uri);
 
-    await User.findByIdAndDelete(userId);
+  try {
+    await client.connect();
+    const database = client.db('Kahoot');
+    const usersCollection = database.collection('users');
+
+    await usersCollection.deleteOne({ _id: userId });
+
+
+
     req.session.destroy();
     res.redirect('/');
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
+  } finally {
+    await client.close();
+  }
+});
+router.get('/quiz_play', async (req, res, next) => {
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    const database = client.db('Kahoot');
+    const quizCollection = database.collection('quizzes');
+
+    // Retrieve quizzes as an array
+    const quizzes = await quizCollection.find().toArray();
+
+    res.render('quiz_play', { quizzes });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  } finally {
+    // Close the MongoDB connection
+    await client.close();
   }
 });
 
