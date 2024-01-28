@@ -6,7 +6,15 @@ const bcrypt = require('bcrypt');
 const uri = "mongodb://127.0.0.1:27017";
 const User = require('../models/User');
 const Quiz = require('../models/Quiz');
-
+function generateGameCode() {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let gameCode = '';
+  for (let i = 0; i < 4; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    gameCode += characters[randomIndex];
+  }
+  return gameCode;
+}
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Kahoot' });
 });
@@ -216,6 +224,40 @@ router.get('/quiz_play', async (req, res, next) => {
     // Close the MongoDB connection
     await client.close();
   }
+});
+router.post('/create_game', async function(req, res, next) {
+  let gameCode;
+  if (req.body.gameCode) {
+    gameCode = req.body.gameCode;
+  } else if (req.query.gameCode) {
+    gameCode = req.query.gameCode;
+  } else {
+
+    return res.status(400).send('Game code is missing');
+  }
+
+  console.log(gameCode);
+  res.redirect(`/quiz_interface?gameCode=${gameCode}`);
+});
+
+
+router.get('/join_game', function(req, res, next) {
+  const gameCode = generateGameCode();
+  console.log(gameCode);
+  res.render('join_game', { gameCode });
+});
+
+
+router.get('/quiz_interface', function(req, res, next) {
+  const gameCode = req.query.gameCode;
+
+  res.render('quiz_interface', { gameCode });
+});
+
+
+router.get('/quiz_results', function(req, res, next) {
+
+  res.render('quiz_results');
 });
 
 module.exports = router;

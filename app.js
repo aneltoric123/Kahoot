@@ -27,17 +27,7 @@ app.use('/users', usersRouter);
 const server = http.createServer(app);
 
 // Set up Socket.IO
-const io = socketIo(server);
-io.on('connection', (socket) => {
-  console.log('A user connected');
-  socket.on('answer', (answer) => {
-    io.emit('answer', answer);
-  });
 
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
-  });
-});
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -54,4 +44,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = {app,server};
+module.exports = app;
