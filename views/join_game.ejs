@@ -91,11 +91,16 @@
     </style>
 </head>
 <body>
+<audio id="backgroundMusic" loop autoplay volume="0.4">
+    <source src="../public/images/lobby-classic-game.mp3" type="audio/mp3">
+
+</audio>
 <img src="../public/images/Kahoot_Logo.png" class="kahoot-logo">
 
 <div class="container">
     <form id="joinGameForm" action="create_game" method="post">
         <div class="form-group">
+            <p>Enter code: <%= gameCode%></p>
             <label for="gameCode" class="label">Enter game code:</label>
             <input type="text" id="gameCode" name="gameCode" class="input" placeholder="Enter game code" required>
         </div>

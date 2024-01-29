@@ -260,4 +260,28 @@ router.get('/quiz_results', function(req, res, next) {
   res.render('quiz_results');
 });
 
+router.get('/quiz_questions', async (req, res) => {
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    const database = client.db('Kahoot');
+    const quizCollection = database.collection('quizzes');
+
+
+    const quiz = await quizCollection.findOne({  });
+    if (!quiz) {
+      return res.status(404).json({ message: 'Quiz not found' });
+    }
+
+
+    res.json({ quizQuestions: quiz.questions });
+  } catch (error) {
+    console.error('Error fetching quiz questions:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  } finally {
+    await client.close();
+  }
+});
+
+
 module.exports = router;
