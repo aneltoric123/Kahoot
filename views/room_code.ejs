@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quiz Room</title>
+</head>
+<body>
+<div>
+    <h1>Quiz Room</h1>
+    <p>Enter this code on your phone to join the quiz:</p>
+    <input type="text" id="roomCodeInput" placeholder="Enter room code">
+    <button onclick="submitCode()">Join Quiz</button>
+</div>
+<script>
+    const socket = io();
+    socket.on('connect', () => {
+        console.log('Connected to server');
+    });
+    socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+    });
+    const submitCode = () => {
+        const roomCode = document.getElementById('roomCodeInput').value;
+        socket.emit('joinRoom', roomCode);
+    };
+</script>
+<script src="../socketio.js"></script>
+</body>
+</html>

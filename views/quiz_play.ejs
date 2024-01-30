@@ -126,7 +126,7 @@
                 <% quizzes.forEach(quiz => { %>
                     <li>
                         <h2><%= quiz.title %></h2>
-                        <a href="/join_game">Play Quiz</a>
+                        <a href="/start-quiz?roomCode=<%= roomCode %>">Play Quiz</a>
                     </li>
                 <% }); %>
             </ul>
