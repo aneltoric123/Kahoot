@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host Play Quiz</title>
+    <!-- Add your CSS and JavaScript links here -->
+</head>
+<body>
+<h1>Host Play Quiz</h1>
+<p>Room Code: <%= roomCode %></p>
+<!-- Render the quiz questions and options here -->
+<% quizData.questions.forEach((question, index) => { %>
+    <div class="question">
+        <h2>Question <%= index + 1 %>:</h2>
+        <p><%= question.questionText %></p>
+        <ul>
+            <% question.options.forEach((option, optionIndex) => { %>
+                <li><input type="radio" name="question<%= index + 1 %>" value="<%= option %>"> <%= option %></li>
+            <% }) %>
+        </ul>
+    </div>
+<% }) %>
+
+</body>
+</html>

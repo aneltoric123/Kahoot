@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const uri = "mongodb://127.0.0.1:27017";
 const User = require('../models/User');
 const Quiz = require('../models/Quiz');
+const Room = require('../models/Room');
 const io = require('socket.io')();
 function generateRoomCode() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -141,17 +142,13 @@ console.log(user);
     console.error(error);
     res.status(500).send('Internal Server Error');
   } finally {
-
     await client.close();
   }
 });
-
-
 router.post('/profile/update', async (req, res) => {
   const { email, username } = req.body;
   const userId = req.session.userId;
   const client = new MongoClient(uri);
-
   try {
     await client.connect();
     const database = client.db('Kahoot');
@@ -159,7 +156,6 @@ router.post('/profile/update', async (req, res) => {
     await usersCollection.updateOne({ _id: userId }, { $set: { email, username } });
     req.session.Email = email;
     req.session.Username = username;
-
     res.redirect('/profile');
   } catch (error) {
     console.error(error);
@@ -202,8 +198,73 @@ router.get('/quiz_play', async (req, res, next) => {
     await client.close();
   }
 });
-router.get('/start-quiz', function(req, res, next) {
+router.get('/roomCode', function(req, res, next) {
   const roomCode = req.query.roomCode;
-  res.render('room_code', { roomCode: roomCode });
+  res.render('roomCode', { roomCode: roomCode });
+});
+router.post('/play-quiz', async (req, res) => {
+    const { quizId, roomCode } = req.body;
+    const client = new MongoClient(uri);
+    try {
+        await client.connect();
+        const database = client.db('Kahoot');
+        const quizCollection = database.collection('quizzes');
+        const quiz = await quizCollection.find({ _id: quizId }).toArray();
+
+        console.log(quiz)
+        if (!quiz) {
+            return res.status(404).send('Quiz not found');
+        }
+
+        let room;
+        if (roomCode) {
+            const roomCollection = database.collection('rooms');
+            const room= await roomCollection.find({ code: roomCode }).toArray();
+
+        } else {
+            const Room = require('../models/Room');
+            room = new Room({ quiz: quizId });
+            console.log(room);
+            await room.save();
+        }
+
+        res.redirect(`/play-quiz/${roomCode}`);
+    } catch (err) {
+        console.error('Error joining/creating room:', err);
+        res.status(500).send('Internal Server Error');
+    } finally {
+        await client.close();
+    }
+});
+router.get('/play-quiz/:roomCode', async (req, res) => {
+    const roomCode = req.params.roomCode;
+    const userIsHost = true;
+    const quizData = {
+        title: "Sample Quiz",
+        questions: [
+            {
+                questionText: "What is the capital of France?",
+                options: ["Paris", "London", "Berlin", "Madrid"],
+                correctOptionIndex: 0
+            },
+            {
+                questionText: "What is the largest planet in our solar system?",
+                options: ["Venus", "Saturn", "Jupiter", "Mars"],
+                correctOptionIndex: 2
+            },
+            {
+                questionText: "Who wrote 'Romeo and Juliet'?",
+                options: ["William Shakespeare", "Charles Dickens", "Jane Austen", "Mark Twain"],
+                correctOptionIndex: 0
+            }
+        ]
+    };
+
+    if (userIsHost) {
+        res.render('host_play_quiz', { roomCode, quizData  });
+    } else {
+
+        res.render('client_play_quiz', { roomCode, quizData });
+    }
 });
 module.exports = router;
