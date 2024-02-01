@@ -265,8 +265,6 @@ router.post('/join-room', async (req, res) => {
             res.redirect('/quiz_play?error=RoomNotFound');
             return;
         }
-
-
         res.redirect(`/play-quiz/${roomCode}`);
     } catch (error) {
         console.error(error);
@@ -277,18 +275,13 @@ router.post('/join-room', async (req, res) => {
 });
 router.post('/delete-room', function(req, res) {
     const roomCode = req.body.roomCode;
-    // Delete the room with the given room code from the database
-    // Redirect to the appropriate page after deletion
+    
 });
-
-// Add route to start the game
 router.post('/start-game', function(req, res) {
     const roomCode = req.body.roomCode;
-    // Start the game for the room with the given room code
-    // Redirect to the appropriate page after starting the game
+
 });
 
-// Modify the route to render the play_quiz view to pass the number of players in the room
 router.get('/play-quiz/:roomCode', async function(req, res) {
     const roomCode = req.params.roomCode;
     const client = new MongoClient(uri);
@@ -299,11 +292,11 @@ router.get('/play-quiz/:roomCode', async function(req, res) {
         const room = await roomCollection.findOne({ code: roomCode });
 
         if (!room) {
-            // If room not found, redirect to an appropriate error page or handle the error as needed
+
             return res.status(404).send('Room not found');
         }
 
-        // Retrieve the number of players in the room
+
         const playersCount = room.players ? room.players.length : 0;
 
         res.render('play-quiz', { roomCode, playersCount });

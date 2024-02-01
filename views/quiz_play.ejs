@@ -12,7 +12,6 @@
             margin: 0;
             padding: 0;
         }
-
         header {
             background-color: #4CAF50;
             color: white;
@@ -96,14 +95,12 @@
             to {
                 transform: translateX(calc(100% - 100px));
             }
-
         }
     </style>
 </head>
 <body>
 <audio id="backgroundMusic" loop autoplay volume="0.4">
     <source src="../public/images/lobby-classic-game.mp3" type="audio/mp3">
-
 </audio>
 <img src="../public/images/Kahoot_Logo.png" class="kahoot-logo">
 <header>
@@ -116,7 +113,6 @@
         </ul>
     </nav>
 </header>
-
 <main>
     <div class="container">
         <div class="container">
@@ -124,12 +120,12 @@
             <form action="/create-room" method="POST">
                 <button type="submit">Create New Room</button>
             </form>
-
             <h2>Join an Existing Room</h2>
             <form action="/join-room" method="POST">
                 <input type="text" name="roomCode" placeholder="Enter Room Code" required>
                 <button type="submit">Join Room</button>
             </form>
+    </div>
     </div>
 </main>
 
