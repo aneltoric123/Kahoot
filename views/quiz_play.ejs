@@ -119,22 +119,17 @@
 
 <main>
     <div class="container">
-        <% if (quizzes.length === 0) { %>
-            <p>No quizzes available.</p>
-        <% } else { %>
-                <ul class="quiz-list">
-                    <% quizzes.forEach(quiz => { %>
-                        <li>
-                            <h2><%= quiz.title %></h2>
-                            <form action="/play-quiz" method="POST">
-                                <input type="hidden" name="quizId" value="<%= quiz._id %>">
-                                <input type="text" name="roomCode" placeholder="Enter Room Code" required>
-                                <button type="submit">Join Game</button>
-                            </form>
-                        </li>
-                    <% }); %>
-                </ul>
-        <% } %>
+        <div class="container">
+            <h2>Create a New Room</h2>
+            <form action="/create-room" method="POST">
+                <button type="submit">Create New Room</button>
+            </form>
+
+            <h2>Join an Existing Room</h2>
+            <form action="/join-room" method="POST">
+                <input type="text" name="roomCode" placeholder="Enter Room Code" required>
+                <button type="submit">Join Room</button>
+            </form>
     </div>
 </main>
 
