@@ -81,6 +81,28 @@
                 transform: translateY(0);
             }
         }
+        h2 {
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
         .kahoot-logo {
             width: 100%;
             max-width: 300px;
@@ -117,13 +139,8 @@
     <div class="container">
         <div class="container">
             <h2>Create a New Room</h2>
-            <form action="/create-room" method="POST">
+            <form action="/create_room" method="POST">
                 <button type="submit">Create New Room</button>
-            </form>
-            <h2>Join an Existing Room</h2>
-            <form action="/join-room" method="POST">
-                <input type="text" name="roomCode" placeholder="Enter Room Code" required>
-                <button type="submit">Join Room</button>
             </form>
     </div>
     </div>

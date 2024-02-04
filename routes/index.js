@@ -55,7 +55,6 @@ router.post('/login', async function(req, res, next) {
     const user = await usersCollection.findOne({ email: req.body.email });
 
     if (user) {
-
       const isPasswordValid = await bcrypt.compare(req.body.password, user.password);
       if (isPasswordValid) {
 
@@ -98,7 +97,8 @@ router.post('/create-quiz', async (req, res) => {
     await client.connect();
     const database = client.db('Kahoot');
     const quizzesCollection = database.collection('quizzes');
-    const { title } = req.body;
+
+    const { quizTitle } = req.body;
     const questions = [];
     for (let i = 1; req.body[`question${i}`]; i++) {
       const questionText = req.body[`question${i}`];
@@ -106,7 +106,7 @@ router.post('/create-quiz', async (req, res) => {
       const correctOptionIndex = parseInt(req.body[`correctOptionIndex${i}`]);
       questions.push({ questionText, options, correctOptionIndex });
     }
-    const quiz = { title, questions };
+    const quiz = { title: quizTitle, questions };
     await quizzesCollection.insertOne(quiz);
     res.redirect('/home');
   } catch (error) {
@@ -124,15 +124,11 @@ router.get('/profile', async (req, res) => {
     const database = client.db('Kahoot');
     const usersCollection = database.collection('users');
     const userId = req.session.userId;
-    console.log(userId)
     if (!userId) {
       res.redirect('/index');
       return;
     }
-
-
     const user = await usersCollection.find({ _id: userId });
-console.log(user);
     if (!user) {
       res.redirect('/index');
       return;
@@ -146,41 +142,60 @@ console.log(user);
   }
 });
 router.post('/profile/update', async (req, res) => {
-  const { email, username } = req.body;
-  const userId = req.session.userId;
-  const client = new MongoClient(uri);
-  try {
-    await client.connect();
-    const database = client.db('Kahoot');
-    const usersCollection = database.collection('users');
-    await usersCollection.updateOne({ _id: userId }, { $set: { email, username } });
-    req.session.Email = email;
-    req.session.Username = username;
-    res.redirect('/profile');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  } finally {
-    await client.close();
-  }
-});
+    try {
+        const { email, username } = req.body;
+        const userId = req.session.userId;
 
+        console.log('User ID:', userId);
+        console.log('Email:', email);
+        console.log('Username:', username);
+
+
+        const client = new MongoClient(uri);
+        await client.connect();
+
+        const database = client.db('Kahoot');
+        const usersCollection = database.collection('users');
+
+
+        await usersCollection.updateOne({ _id: new ObjectId(userId) }, { $set: { email, username } });
+
+
+        req.session.Email = email;
+        req.session.Username = username;
+
+        client.close();
+
+        res.redirect('/profile');
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 router.post('/profile/delete', async (req, res) => {
-  const userId = req.session.userId;
-  const client = new MongoClient(uri);
-  try {
-    await client.connect();
-    const database = client.db('Kahoot');
-    const usersCollection = database.collection('users');
-    await usersCollection.deleteOne({ _id: userId });
-    req.session.destroy();
-    res.redirect('/');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
-  } finally {
-    await client.close();
-  }
+    try {
+        const userId = req.session.userId;
+        console.log('User ID:', userId);
+
+
+        const client = new MongoClient(uri);
+        await client.connect();
+
+        const database = client.db('Kahoot');
+        const usersCollection = database.collection('users');
+
+        // Perform delete operation
+        await usersCollection.deleteOne({ _id: new ObjectId(userId) });
+        // Destroy session
+        req.session.destroy();
+
+        client.close();
+
+        res.redirect('/');
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 router.get('/quiz_play', async (req, res, next) => {
   const client = new MongoClient(uri);
@@ -198,42 +213,7 @@ router.get('/quiz_play', async (req, res, next) => {
     await client.close();
   }
 });
-
-router.post('/play-quiz', async (req, res) => {
-    const { quizId, roomCode } = req.body;
-    const client = new MongoClient(uri);
-    try {
-        await client.connect();
-        const database = client.db('Kahoot');
-        const quizCollection = database.collection('quizzes');
-        const quiz = await quizCollection.find({ _id: quizId }).toArray();
-
-        console.log(quiz)
-        if (!quiz) {
-            return res.status(404).send('Quiz not found');
-        }
-
-        let room;
-        if (roomCode) {
-            const roomCollection = database.collection('rooms');
-            const room= await roomCollection.find({ code: roomCode }).toArray();
-
-        } else {
-            const Room = require('../models/Room');
-            room = new Room({ quiz: quizId });
-            console.log(room);
-            await room.save();
-        }
-
-        res.redirect(`/play-quiz/${roomCode}`);
-    } catch (err) {
-        console.error('Error joining/creating room:', err);
-        res.status(500).send('Internal Server Error');
-    } finally {
-        await client.close();
-    }
-});
-router.post('/create-room', async (req, res) => {
+router.post('/create_room', async (req, res) => {
     const client = new MongoClient(uri);
     try {
         await client.connect();
@@ -243,7 +223,7 @@ router.post('/create-room', async (req, res) => {
 
         const roomCode = generateRoomCode();
         await roomCollection.insertOne({ code: roomCode, quizId: null });
-        res.redirect(`/play-quiz/${roomCode}`);
+        res.redirect(`/create-room/${roomCode}`);
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -251,20 +231,35 @@ router.post('/create-room', async (req, res) => {
         await client.close();
     }
 });
-router.post('/join-room', async (req, res) => {
-    const { roomCode } = req.body;
+router.post('/delete-room', async function(req, res) {
+    const roomCode = req.body.roomCode;
     const client = new MongoClient(uri);
     try {
         await client.connect();
         const database = client.db('Kahoot');
         const roomCollection = database.collection('rooms');
-        const room = await roomCollection.findOne({ code: roomCode });
 
-        if (!room) {
 
-            res.redirect('/quiz_play?error=RoomNotFound');
-            return;
-        }
+        await roomCollection.deleteOne({ code: roomCode });
+
+        res.redirect('/home');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    } finally {
+        await client.close();
+    }
+});
+
+router.post('/start-game', async function(req, res) {
+    const roomCode = req.body.roomCode;
+    const client = new MongoClient(uri);
+    try {
+        await client.connect();
+        const database = client.db('Kahoot');
+        const roomCollection = database.collection('rooms');
+        await roomCollection.updateOne({ code: roomCode }, { $set: { gameStarted: true } });
+
         res.redirect(`/play-quiz/${roomCode}`);
     } catch (error) {
         console.error(error);
@@ -273,16 +268,7 @@ router.post('/join-room', async (req, res) => {
         await client.close();
     }
 });
-router.post('/delete-room', function(req, res) {
-    const roomCode = req.body.roomCode;
-    
-});
-router.post('/start-game', function(req, res) {
-    const roomCode = req.body.roomCode;
-
-});
-
-router.get('/play-quiz/:roomCode', async function(req, res) {
+router.get('/create-room/:roomCode', async function(req, res) {
     const roomCode = req.params.roomCode;
     const client = new MongoClient(uri);
     try {
@@ -290,16 +276,11 @@ router.get('/play-quiz/:roomCode', async function(req, res) {
         const database = client.db('Kahoot');
         const roomCollection = database.collection('rooms');
         const room = await roomCollection.findOne({ code: roomCode });
-
         if (!room) {
-
             return res.status(404).send('Room not found');
         }
-
-
         const playersCount = room.players ? room.players.length : 0;
-
-        res.render('play-quiz', { roomCode, playersCount });
+        res.render('create-room', { roomCode, playersCount });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -307,6 +288,4 @@ router.get('/play-quiz/:roomCode', async function(req, res) {
         await client.close();
     }
 });
-
-
 module.exports = router;
