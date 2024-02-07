@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waiting Lobby</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .player-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .player-list li {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .player-list li span {
+            font-weight: bold;
+        }
+        .start-button {
+            display: block;
+            width: 100%;
+            padding: 12px 24px;
+            margin-top: 20px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .start-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Waiting Lobby</h1>
+    <p>Players currently in the lobby:</p>
+    <ul class="player-list">
+        <% players.forEach(player => { %>
+            <li><span><%= player.username %></span></li>
+        <% }); %>
+    </ul>
+    <button id="startGameButton" class="start-button" disabled>Start Game</button>
+</div>
+
+<script src="../socketio.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const socket = io();
+
+        socket.on('playersUpdated', (players) => {
+            updatePlayerList(players);
+        });
+
+        document.getElementById('startGameButton').addEventListener('click', () => {
+            socket.emit('startGame');
+        });
+
+        function updatePlayerList(players) {
+            const playerList = document.querySelector('.player-list');
+            playerList.innerHTML = '';
+            players.forEach(player => {
+                const listItem = document.createElement('li');
+                listItem.textContent = player.username;
+                playerList.appendChild(listItem);
+            });
+
+            const startButton = document.getElementById('startGameButton');
+            startButton.disabled = players.length < 2; // Enable start button if there are at least 2 players
+        }
+    });
+</script>
+</body>
+</html>

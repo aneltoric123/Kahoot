@@ -8,7 +8,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            background: linear-gradient(to right, #99ccff, #99ffcc);
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
@@ -19,6 +20,7 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: slideInAnimation 1s ease-in-out forwards;
         }
         h1 {
             text-align: center;
@@ -54,16 +56,71 @@
         .btn:hover {
             background-color: #27ae60;
         }
+        @keyframes slideInAnimation {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .kahoot-logo {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+
+            animation: moveLeftToRight 10s linear infinite alternate;
+        }
+        @keyframes moveLeftToRight {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(calc(100% - 100px));
+            }
+        }
     </style>
 </head>
 <body>
+<img src="../public/images/Kahoot_Logo.png" class="kahoot-logo">
+<audio id="backgroundMusic" loop autoplay volume="0.4">
+    <source src="../public/images/lobby-classic-game.mp3" type="audio/mp3">
+</audio>
+
 <div class="container">
     <h1>Welcome to Kahoot Lobby</h1>
     <p>Enter the game code provided by the host to join the game:</p>
-    <form action="/join-game" method="POST">
-        <input type="text" class="game-code-input" name="gameCode" placeholder="Enter Game Code" required>
+    <form id="joinGameForm" action="/users/join-game" method="POST">
+        <input type="text" class="game-code-input" id="gameCodeInput" placeholder="Enter Game Code" name="gameCode" required>
         <button type="submit" class="btn"><i class="fas fa-sign-in-alt"></i> Join Game</button>
     </form>
 </div>
+
+
+<script src="../socketio.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const socket = io();
+        const joinGameForm = document.getElementById('joinGameForm');
+        joinGameForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const gameCodeInput = document.getElementById('gameCodeInput');
+            const gameCode = gameCodeInput.value.trim();
+            if (gameCode) {
+                socket.emit('joinGame', gameCode);
+            } else {
+                alert('Please enter a game code');
+            }
+        });
+
+        socket.on('gameJoined', (gameCode) => {
+            window.location.href = `/game/${gameCode}`;
+        });
+
+
+    });
+</script>
 </body>
 </html>
