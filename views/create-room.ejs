@@ -108,14 +108,11 @@
     <div class="container">
         <h2>Quiz Room</h2>
         <p>Room Code: <%= roomCode %></p>
-        <p>Number of Players: <%= playersCount %></p>
         <p>Share this code with other players to join the room.</p>
-        <% if (playersCount > 0) { %>
-            <form action="/start-game" method="POST">
-                <input type="hidden" name="roomCode" value="<%= roomCode %>">
+        <form action="/start-game" method="POST">
+            <input type="hidden" name="roomCode" value="<%= roomCode %>">
                 <button type="submit">Start Game</button>
-            </form>
-        <% } %>
+        </form>
         <form action="/delete-room" method="POST">
             <input type="hidden" name="roomCode" value="<%= roomCode %>">
             <button type="submit">Delete Room</button>

@@ -63,42 +63,10 @@
 </head>
 <body>
 <div class="container">
-    <h1>Waiting Lobby</h1>
-    <p>Players currently in the lobby:</p>
-    <ul class="player-list">
-        <% players.forEach(player => { %>
-            <li><span><%= player.username %></span></li>
-        <% }); %>
-    </ul>
-    <button id="startGameButton" class="start-button" disabled>Start Game</button>
+    <h1>Waiting For Host to Start Game</h1>
+
 </div>
-
 <script src="../socketio.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const socket = io();
 
-        socket.on('playersUpdated', (players) => {
-            updatePlayerList(players);
-        });
-
-        document.getElementById('startGameButton').addEventListener('click', () => {
-            socket.emit('startGame');
-        });
-
-        function updatePlayerList(players) {
-            const playerList = document.querySelector('.player-list');
-            playerList.innerHTML = '';
-            players.forEach(player => {
-                const listItem = document.createElement('li');
-                listItem.textContent = player.username;
-                playerList.appendChild(listItem);
-            });
-
-            const startButton = document.getElementById('startGameButton');
-            startButton.disabled = players.length < 2; // Enable start button if there are at least 2 players
-        }
-    });
-</script>
 </body>
 </html>

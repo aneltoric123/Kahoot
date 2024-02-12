@@ -219,10 +219,9 @@ router.post('/create_room', async (req, res) => {
         await client.connect();
         const database = client.db('Kahoot');
         const roomCollection = database.collection('rooms');
-
-
         const roomCode = generateRoomCode();
-        await roomCollection.insertOne({ code: roomCode, quizId: null });
+        const selectedQuizId = req.body.quiz;
+        await roomCollection.insertOne({ code: roomCode, quizId: selectedQuizId });
         res.redirect(`/create-room/${roomCode}`);
     } catch (error) {
         console.error(error);
@@ -238,29 +237,8 @@ router.post('/delete-room', async function(req, res) {
         await client.connect();
         const database = client.db('Kahoot');
         const roomCollection = database.collection('rooms');
-
-
         await roomCollection.deleteOne({ code: roomCode });
-
         res.redirect('/home');
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
-    } finally {
-        await client.close();
-    }
-});
-
-router.post('/start-game', async function(req, res) {
-    const roomCode = req.body.roomCode;
-    const client = new MongoClient(uri);
-    try {
-        await client.connect();
-        const database = client.db('Kahoot');
-        const roomCollection = database.collection('rooms');
-        await roomCollection.updateOne({ code: roomCode }, { $set: { gameStarted: true } });
-
-        res.redirect(`/play-quiz/${roomCode}`);
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -279,8 +257,7 @@ router.get('/create-room/:roomCode', async function(req, res) {
         if (!room) {
             return res.status(404).send('Room not found');
         }
-        const playersCount = room.players ? room.players.length : 0;
-        res.render('create-room', { roomCode, playersCount });
+        res.render('create-room', { roomCode });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -288,4 +265,8 @@ router.get('/create-room/:roomCode', async function(req, res) {
         await client.close();
     }
 });
+router.get('/lobby', function(req, res, next) {
+    res.render('lobby');
+});
+
 module.exports = router;

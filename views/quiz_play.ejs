@@ -139,9 +139,22 @@
     <div class="container">
         <div class="container">
             <h2>Create a New Room</h2>
+
             <form action="/create_room" method="POST">
+                <label for="quiz">Select Quiz:</label>
+                <select name="quiz" id="quiz">
+                    <% quizzes.forEach(quiz => { %>
+                        <option value="<%= quiz._id %>"><%= quiz.title %></option>
+                    <% }); %>
+                </select>
                 <button type="submit">Create New Room</button>
             </form>
+            <br>
+            <hr>
+
+            <button> <a href="/lobby"> Join already existing room! </a></button>
+
+
     </div>
     </div>
 </main>

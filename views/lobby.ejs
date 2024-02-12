@@ -70,7 +70,6 @@
             width: 100%;
             max-width: 300px;
             height: auto;
-
             animation: moveLeftToRight 10s linear infinite alternate;
         }
         @keyframes moveLeftToRight {
@@ -96,31 +95,7 @@
         <input type="text" class="game-code-input" id="gameCodeInput" placeholder="Enter Game Code" name="gameCode" required>
         <button type="submit" class="btn"><i class="fas fa-sign-in-alt"></i> Join Game</button>
     </form>
+    <a href="/quiz_play">Back</a>
 </div>
-
-
-<script src="../socketio.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const socket = io();
-        const joinGameForm = document.getElementById('joinGameForm');
-        joinGameForm.addEventListener('submit', (event) => {
-            event.preventDefault();
-            const gameCodeInput = document.getElementById('gameCodeInput');
-            const gameCode = gameCodeInput.value.trim();
-            if (gameCode) {
-                socket.emit('joinGame', gameCode);
-            } else {
-                alert('Please enter a game code');
-            }
-        });
-
-        socket.on('gameJoined', (gameCode) => {
-            window.location.href = `/game/${gameCode}`;
-        });
-
-
-    });
-</script>
 </body>
 </html>
