@@ -271,8 +271,15 @@ router.get('/create-room/:roomCode', async function(req, res) {
         await client.close();
     }
 });
-router.get('/lobby', function(req, res, next) {
-    res.render('lobby');
-});
 
+router.get('/lobby', function(req, res, next) {
+    res.render('lobby',{ username: req.session.username });
+});
+router.post('/waiting_lobby',function(reg,res)
+{
+   res.redirect('waiting_lobby');
+});
+router.get('/waiting_lobby', function(req, res, next) {
+    res.render('waiting_lobby',{ username: req.session.Username });
+});
 module.exports = router;

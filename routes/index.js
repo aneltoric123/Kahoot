@@ -248,6 +248,7 @@ router.post('/delete-room', async function(req, res) {
 });
 router.get('/create-room/:roomCode', async function(req, res) {
     const roomCode = req.params.roomCode;
+
     const client = new MongoClient(uri);
     try {
         await client.connect();
@@ -257,7 +258,7 @@ router.get('/create-room/:roomCode', async function(req, res) {
         if (!room) {
             return res.status(404).send('Room not found');
         }
-        res.render('create-room', { roomCode });
+        res.render('create-room', { roomCode});
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -266,7 +267,13 @@ router.get('/create-room/:roomCode', async function(req, res) {
     }
 });
 router.get('/lobby', function(req, res, next) {
-    res.render('lobby');
+    res.render('lobby',{ username: req.session.username });
 });
-
+router.post('/waiting_lobby',function(reg,res)
+{
+    res.redirect('waiting_lobby');
+});
+router.get('/waiting_lobby', function(req, res, next) {
+    res.render('waiting_lobby',{ username: req.session.Username });
+});
 module.exports = router;

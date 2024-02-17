@@ -91,11 +91,13 @@
 <div class="container">
     <h1>Welcome to Kahoot Lobby</h1>
     <p>Enter the game code provided by the host to join the game:</p>
-    <form id="joinGameForm" action="/users/join-game" method="POST">
+    <form id="joinGameForm" action="/waiting_lobby" method="post">
         <input type="text" class="game-code-input" id="gameCodeInput" placeholder="Enter Game Code" name="gameCode" required>
         <button type="submit" class="btn"><i class="fas fa-sign-in-alt"></i> Join Game</button>
     </form>
     <a href="/quiz_play">Back</a>
 </div>
+<script src="../socketio.js"></script>
+
 </body>
 </html>

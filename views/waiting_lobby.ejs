@@ -1,3 +1,5 @@
+<!-- waiting_lobby.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,17 +10,19 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background: linear-gradient(to right, #99ccff, #99ffcc);
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
         .container {
-            max-width: 800px;
+            max-width: 600px;
             margin: 50px auto;
             padding: 20px;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: slideInAnimation 1s ease-in-out forwards;
         }
         h1 {
             text-align: center;
@@ -30,43 +34,14 @@
         }
         .player-list li {
             margin-bottom: 10px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .player-list li span {
-            font-weight: bold;
-        }
-        .start-button {
-            display: block;
-            width: 100%;
-            padding: 12px 24px;
-            margin-top: 20px;
-            background-color: #4caf50;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .start-button:hover {
-            background-color: #45a049;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>Waiting For Host to Start Game</h1>
-
+    <h1>Waiting Lobby</h1>
+    <p>Waiting for other players to join...</p>
+<a href="/lobby">Leave Game</a>
 </div>
-<script src="../socketio.js"></script>
-
 </body>
 </html>
