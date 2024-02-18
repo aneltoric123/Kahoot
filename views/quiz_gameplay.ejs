@@ -1,0 +1,32 @@
+<!-- quiz_gameplay.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Gameplay</title>
+    <!-- Add any CSS stylesheets or libraries here -->
+</head>
+<body>
+<h1>Quiz Gameplay</h1>
+<div id="quiz-container">
+    <% if (quizData && quizData.length > 0) { %>
+        <form id="quiz-form" action="/room/<%= roomId %>/quiz" method="post">
+            <% quizData.forEach((question, index) => { %>
+                <div class="question">
+                    <p><%= index + 1 %>. <%= question.question %></p>
+                    <% question.options.forEach((option, optionIndex) => { %>
+                        <input type="radio" id="option_<%= index %>_<%= optionIndex %>" name="answers[<%= index %>]" value="<%= option %>">
+                        <label for="option_<%= index %>_<%= optionIndex %>"><%= option %></label><br>
+                    <% }) %>
+                </div>
+            <% }) %>
+            <button type="submit">Submit Answers</button>
+        </form>
+    <% } else { %>
+        <p>No quiz questions available.</p>
+    <% } %>
+</div>
+<!-- Add any JavaScript scripts or libraries here -->
+</body>
+</html>

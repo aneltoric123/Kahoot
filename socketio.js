@@ -1,17 +1,40 @@
 const express = require('express');
 const http = require('http');
-const socketIo = require('socket.io');
 const mongoose = require('mongoose');
-const Room = require('./models/room'); // Import the Room model
-const User  =require('./models/user');
-const Quiz = require('./models/quiz');
 const app = express();
+const { Server }=require('socket.io');
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = new Server(server);
 
-// MongoDB connection setup
-mongoose.connect('mongodb://localhost:27017/Kahoot', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://localhost:27017/Kahoot');
 const db = mongoose.connection;
+io.on('connection', (socket) => {
+    console.log('A user connected');
 
-const PORT = process.env.PORT || 3000;
+
+    socket.on('joinGame', async ({ gameCode, username }) => {
+        try {
+
+            if (!gameCode || !username) {
+                console.log('Game code and username are required');
+            }
+            let room = await Room.findOne({ code: gameCode });
+            if (!room) {
+                console.log('Room not found');
+            }
+            room.participants.push({ username });
+            await room.save();
+            console.log("Added user to game");
+            socket.emit('joinGameSuccess', { message: 'Joined game successfully' });
+        } catch (error) {
+
+            socket.emit('joinGameError', { error: error.message });
+        }
+    });
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
+const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+module.exports = app;

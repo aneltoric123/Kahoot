@@ -110,7 +110,7 @@
 
         <p>Room Code: <%= roomCode %></p>
         <p>Share this code with other players to join the room.</p>
-        <form action="/start-game" method="POST">
+        <form action="/room/<%= roomCode %>/quiz" method="POST">
             <input type="hidden" name="roomCode" value="<%= roomCode %>">
                 <button type="submit">Start Game</button>
         </form>

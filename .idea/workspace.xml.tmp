@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="42e3f97f-99c5-4af8-9239-aed66ab10749" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2aDfZDCzxDGp3OOUjWqvkLVrl4X" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;20.5.1&quot;,
+    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;20.5.9&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Anel/Documents/Node/Kahoot2/private/javascripts/socketio.js&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;C:/Program Files/nodejs/node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Anel\\AppData\\Local\\JetBrains\\Toolbox\\apps\\WebStorm\\ch-0\\233.11799.293\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Anel\Documents\Node\Kahoot2" />
+      <recent name="C:\Users\Anel\Documents\Node\Kahoot2\public\images" />
+      <recent name="C:\Users\Anel\Documents\Node\Kahoot2\views\images" />
+      <recent name="C:\Users\Anel\Documents\Node\Kahoot2\models" />
+      <recent name="C:\Users\Anel\Documents\Node\Kahoot2\" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="42e3f97f-99c5-4af8-9239-aed66ab10749" name="Changes" comment="" />
+      <created>1703858124646</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1703858124646</updated>
+      <workItem from="1703858126501" duration="1246000" />
+      <workItem from="1703932095192" duration="13989000" />
+      <workItem from="1704013467007" duration="5492000" />
+      <workItem from="1704021526352" duration="2368000" />
+      <workItem from="1704103239306" duration="10010000" />
+      <workItem from="1704117874989" duration="6687000" />
+      <workItem from="1704193622460" duration="9695000" />
+      <workItem from="1704293701406" duration="3067000" />
+      <workItem from="1704352444935" duration="12000" />
+      <workItem from="1704532404220" duration="36000" />
+      <workItem from="1705850149701" duration="16000" />
+      <workItem from="1705939171884" duration="3124000" />
+      <workItem from="1706277928041" duration="1050000" />
+      <workItem from="1706342435689" duration="1646000" />
+      <workItem from="1706344514085" duration="5773000" />
+      <workItem from="1706375123098" duration="2613000" />
+      <workItem from="1706429258395" duration="22915000" />
+      <workItem from="1706528354070" duration="1303000" />
+      <workItem from="1706531334872" duration="2268000" />
+      <workItem from="1706541515969" duration="2003000" />
+      <workItem from="1706620325113" duration="13088000" />
+      <workItem from="1706709558623" duration="5379000" />
+      <workItem from="1706720888887" duration="6411000" />
+      <workItem from="1706771747325" duration="6020000" />
+      <workItem from="1706785814471" duration="2460000" />
+      <workItem from="1706791198849" duration="591000" />
+      <workItem from="1706954759200" duration="631000" />
+      <workItem from="1707030997958" duration="2964000" />
+      <workItem from="1707052996564" duration="9980000" />
+      <workItem from="1707130187785" duration="2980000" />
+      <workItem from="1707296159564" duration="7373000" />
+      <workItem from="1707500208145" duration="9000" />
+      <workItem from="1707741405918" duration="10824000" />
+      <workItem from="1707983890932" duration="614000" />
+      <workItem from="1707986685190" duration="732000" />
+      <workItem from="1708107810565" duration="12000" />
+      <workItem from="1708164402827" duration="9770000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

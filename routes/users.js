@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-const io = require('socket.io-client');
-const socket = io('http://localhost:3000');
 const mongoose = require('mongoose');
 const Room = require('../models/Room');
 const User = require('../models/User');
@@ -9,6 +7,35 @@ const Quiz= require('../models/Quiz')
 const {MongoClient, ObjectId} = require("mongodb");
 const bcrypt = require("bcrypt");
 const uri = "mongodb://127.0.0.1:27017";
+const { Server } = require('socket.io');
+const io = new Server();
+io.on('connection', (socket) => {
+    console.log('A user connected');
+
+
+    socket.on('joinGame', async ({ gameCode, username }) => {
+        try {
+
+            if (!gameCode || !username) {
+                console.log('Game code and username are required');
+            }
+            let room = await Room.findOne({ code: gameCode });
+            if (!room) {
+                console.log('Room not found');
+            }
+            room.participants.push({ username });
+            await room.save();
+            console.log("Added user to game");
+            socket.emit('joinGameSuccess', { message: 'Joined game successfully' });
+        } catch (error) {
+
+            socket.emit('joinGameError', { error: error.message });
+        }
+    });
+    socket.on('disconnect', () => {
+        console.log('User disconnected');
+    });
+});
 
 
 function generateRoomCode() {

@@ -7,7 +7,22 @@ const uri = "mongodb://127.0.0.1:27017";
 const User = require('../models/User');
 const Quiz = require('../models/Quiz');
 const Room = require('../models/Room');
-const io = require('socket.io')();
+const { Server } = require('socket.io');
+const io = new Server();
+async function getQuizDataForRoom(roomId) {
+    try {
+        // Find the room by its ID and populate the quiz field
+        const room = await Room.findById(roomId).populate('quiz');
+        if (!room) {
+            return null; // Room not found
+        }
+        // Return the quiz data associated with the room
+        return room.quiz;
+    } catch (error) {
+        console.error('Error fetching quiz data for room:', error);
+        throw error; // Forward the error to the caller
+    }
+}
 function generateRoomCode() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   let roomCode = '';
@@ -275,5 +290,20 @@ router.post('/waiting_lobby',function(reg,res)
 });
 router.get('/waiting_lobby', function(req, res, next) {
     res.render('waiting_lobby',{ username: req.session.Username });
+});
+router.get('/room/:roomName/quiz', async (req, res) => {
+    try {
+        const roomId = req.params.roomId;
+        // Fetch quiz data for the specified room ID
+        const quizData = await getQuizDataForRoom(roomId);
+        if (!quizData) {
+            return res.status(404).send('Quiz not found for this room');
+        }
+        // Render the quiz gameplay view with the fetched quiz data
+        res.render('quiz_gameplay', { quizData, roomId });
+    } catch (error) {
+        console.error('Error rendering quiz gameplay page:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 module.exports = router;

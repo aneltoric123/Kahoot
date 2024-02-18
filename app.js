@@ -8,8 +8,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const http = require('http');
 const socketIo = require('socket.io');
-// const app = require('./private/javascripts/socketio');
-const app= express();
+const app= require('./socketio');
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(session({
